@@ -2,25 +2,28 @@ from app import db
 
 #Customer table
 class Customer(db.Model):
-    __tablename__ = 'Customer_DB'
+    __tablename__ = 'Customer'
 
-    customerId = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    last_Name = db.Column(db.String(50))
-    age = db.Column(db.Integer)
-    country = db.Column(db.String(50))
+    Customer_ID = db.Column(db.Integer, primary_key=True)
+    Customer_First_Name = db.Column(db.String(50))
+    Customer_Last_Name = db.Column(db.String(50))
+    Age = db.Column(db.Integer)
+    Country = db.Column(db.String(50))
 
 #Order table
 class Order(db.Model):
-    __tablename__ = 'Order_DB'
+    __tablename__ = 'Order'
 
-    orderId = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date)
-    customerId = db.Column(db.Integer, db.ForeignKey('Customer_DB.CustomerId'))
-    price = db.Column(db.Float)
-    furniture = db.Column(db.String(50)) 
-
-    customer = db.relationship('Customer', foreign_keys=[customerId])
-
-def __repr__(self):
-    return '<Customer {}>'.format(self.name)
+    Order_Id = db.Column(db.Integer, primary_key=True)
+    Date = db.Column(db.Date)
+    Customer_ID = db.Column(db.Integer, db.ForeignKey('Customer.Customer_ID'))
+    Price = db.Column(db.Float)
+    Chair = db.Column(db.Integer)
+    Stool = db.Column(db.Integer)
+    Table = db.Column(db.Integer)
+    Cabinet = db.Column(db.Integer)
+    Dresser = db.Column(db.Integer)
+    Couch = db.Column(db.Integer)
+    Bed = db.Column(db.Integer)
+    Shelf = db.Column(db.Integer)
+    Customer = db.relationship('Customer', backref=db.backref('orders', lazy=True))
