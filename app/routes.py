@@ -7,5 +7,6 @@ from .models import Customer, db
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    customers = Customer.query.all()
+    return render_template('index.html',customers=customers)
 

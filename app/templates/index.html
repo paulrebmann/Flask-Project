@@ -2,4 +2,7 @@
 
 {% block content %}
     <h1> Flask Project</h1>
+    {% for customer in customers %}
+        <li>{{ customer.Customer_First_Name }} {{ customer.Customer_Last_Name }} - {{ customer.Age }} - {{ customer.Country }}</li>
+    {% endfor %}
 {% endblock %}

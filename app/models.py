@@ -16,7 +16,7 @@ class Order(db.Model):
 
     Order_Id = db.Column(db.Integer, primary_key=True)
     Date = db.Column(db.Date)
-    Customer_ID = db.Column(db.Integer, db.ForeignKey('Customer.Customer_ID'))
+    Customer_ID = db.Column(db.Integer, db.ForeignKey('Customer.Customer_ID'), nullable=False)
     Price = db.Column(db.Float)
     Chair = db.Column(db.Integer)
     Stool = db.Column(db.Integer)
@@ -26,4 +26,3 @@ class Order(db.Model):
     Couch = db.Column(db.Integer)
     Bed = db.Column(db.Integer)
     Shelf = db.Column(db.Integer)
-    Customer = db.relationship('Customer', backref=db.backref('orders', lazy=True))
