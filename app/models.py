@@ -10,6 +10,10 @@ class Customer(db.Model):
     Age = db.Column(db.Integer)
     Country = db.Column(db.String(50))
 
+def __repr__(self):
+return '<Customer {}>'.format(self.username)
+
+
 #Order table
 class Order(db.Model):
     __tablename__ = 'Order'
@@ -26,3 +30,6 @@ class Order(db.Model):
     Couch = db.Column(db.Integer)
     Bed = db.Column(db.Integer)
     Shelf = db.Column(db.Integer)
+
+def __repr__(self):
+return '<Order {}>'.format(self.description)
