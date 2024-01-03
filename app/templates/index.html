@@ -1,8 +1,17 @@
-{% extends "base.html" %}
-
-{% block content %}
-    <h1> Flask Project</h1>
-    {% for customer in customers %}
-        <li>{{ customer.Customer_First_Name }} {{ customer.Customer_Last_Name }} - {{ customer.Age }} - {{ customer.Country }}</li>
-    {% endfor %}
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Order</title>
+</head>
+<body>  
+    <h1>Customer</h1>
+    <ul>
+        {%for customer in customers%}
+            <li>{{customer.name}}{{customer.last_name}} - <a href="{{ url_for('add_order', customer_id=customer.id) }}">Add Order</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('add_customer') }}">Add New Customer</a>
+</body>
+</html>
