@@ -2,10 +2,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from app.models import Customer, Order
+from app import app
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
+
+
 
 # routes.....
 @app.route('/')
@@ -98,9 +99,6 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
 
 # where are the customers from?
 @app.route('/customer_locations')
@@ -225,9 +223,6 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
 
 # ...  routes ...
 @app.route('/top_orders')
@@ -237,7 +232,7 @@ def top_orders():
     # Find customers with the most orders
     customers_most_orders = sorted(customers, key=lambda x: len(x.orders), reverse=True)[:10]
 
-    return render_template('top_orders.html', customers=customers_most_orders)
+    return render_template('top_order.html', customers=customers_most_orders)
 
 @app.route('/top_spenders')
 def top_spenders():

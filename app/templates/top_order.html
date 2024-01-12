@@ -9,7 +9,7 @@
     <h1>Top Customers by Orders</h1>
     <ul>
         {% for customer in customers %}
-            <li>{{ customer.name }} {{ customer.last_name }} - Orders: {{ len(customer.orders) }}</li>
+            <li>{{ customer.customer_first_name }} {{ customer.customer_last_name }} - Orders: {{ len(customer.orders) }}</li>
         {% endfor %}
     </ul>
     <br>
