@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Order</title>
+</head>
+<body>  
+    <h1>Customer</h1>
+    <ul>
+        {%for order in orders%}
+            <li>Order ID: {{order.order_id}} Customer_ID:{{order.customer_id}} Price:{{order.price}} Chair:{{order.chair}} Stool:{{order.stool}} Table:{{order.table}} Cabinet:{{order.cabinet}} Dresser:{{order.dresser}} Couch:{{order.couch}} Bed:{{order.bed}} Shelf:{{order.shelf}}- <a href="{{ url_for('edit_order', order_id=order.order_id) }}">Edit Order</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Back to Customers</a>
+</body>
+</html>

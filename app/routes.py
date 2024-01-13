@@ -3,8 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from app.models import Customer, Order
-from app import app
-
+from app import app, db
 
 
 
@@ -14,6 +13,11 @@ def index():
     customers = Customer.query.all()
     return render_template('index.html', customers=customers)
 
+@app.route('/orders')
+def orders():
+    orders = Order.query.all()
+    return render_template('orders.html', orders=orders)
+
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
     if request.method == 'POST':
@@ -22,9 +26,10 @@ def add_customer():
         age = request.form['age']
         country = request.form['country']
 
-        new_customer = Customer(name=name, last_name=last_name, age=age, country=country)
+        new_customer = Customer(customer_first_name=name, customer_last_name=last_name, age=age, country=country)
         db.session.add(new_customer)
         db.session.commit()
+
 
         return redirect(url_for('index'))
 
@@ -35,8 +40,8 @@ def edit_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
 
     if request.method == 'POST':
-        customer.name = request.form['name']
-        customer.last_name = request.form['last_name']
+        customer.customer_first_name = request.form['name']
+        customer.customer_last_name = request.form['last_name']
         customer.age = request.form['age']
         customer.country = request.form['country']
 
@@ -57,9 +62,16 @@ def delete_customer(customer_id):
 def add_order(customer_id):
     if request.method == 'POST':
         price = request.form['price']
-        furniture = request.form['furniture']
+        chair = request.form['chair']
+        stool = request.form['stool']
+        table = request.form['table']
+        cabinet = request.form['cabinet']
+        dresser = request.form['dresser']
+        couch = request.form['couch']
+        bed = request.form['bed']
+        shelf = request.form['shelf']
 
-        new_order = Order(customer_id=customer_id, price=price, furniture=furniture)
+        new_order = Order(customer_id=customer_id, price=price, chair=chair, stool=stool, table=table, cabinet=cabinet,dresser=dresser,couch=couch,bed=bed,shelf=shelf)
         db.session.add(new_order)
         db.session.commit()
 
@@ -73,7 +85,14 @@ def edit_order(order_id):
 
     if request.method == 'POST':
         order.price = request.form['price']
-        order.furniture = request.form['furniture']
+        order.chair = request.form['chair']
+        order.stool = request.form['stool']
+        order.table = request.form['table']
+        order.cabinet = request.form['cabinet']
+        order.dresser = request.form['dresser']
+        order.couch = request.form['couch']
+        order.bed = request.form['bed']
+        order.shelf = request.form['shelf']
 
         db.session.commit()
         return redirect(url_for('index'))
@@ -88,8 +107,6 @@ def delete_order(order_id):
 
     return redirect(url_for('index'))
 
-if __name__ == '__main__':
-    app.run(debug=True)
 
 
 # Task 3a: visualize data
@@ -97,8 +114,10 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import matplotlib.pyplot as plt
+import matplotlib
 from io import BytesIO
 import base64
+
 
 # where are the customers from?
 @app.route('/customer_locations')
@@ -116,6 +135,7 @@ def customer_locations():
     labels = list(country_counts.keys())
     values = list(country_counts.values())
 
+    matplotlib.use('agg')
     plt.bar(labels, values)
     plt.xlabel('Countries')
     plt.ylabel('Number of Customers')
@@ -133,27 +153,20 @@ def customer_locations():
 
     return render_template('visualization.html', img_base64=img_base64, title='Customer Locations')
 
+
 # most popular forniture?
 
 @app.route('/popular_furniture')
 def popular_furniture():
     orders = Order.query.all()
-    furniture_items = [order.furniture for order in orders]
+    chair_items = [order.chair for order in orders]
+    table_items = [order.table for order in orders]
 
-    furniture_counts = {}
-    for furniture in furniture_items:
-        if furniture in furniture_counts:
-            furniture_counts[furniture] += 1
-        else:
-            furniture_counts[furniture] = 1
-
-    labels = list(furniture_counts.keys())
-    values = list(furniture_counts.values())
-
-    plt.bar(labels, values)
+    matplotlib.use('agg')
+    plt.scatter(chair_items, table_items)
     plt.xlabel('Furniture')
-    plt.ylabel('Number of Orders')
-    plt.title('Popular Furniture')
+    plt.ylabel('Chair')
+    plt.title('Table')
     plt.xticks(rotation=45, ha='right')
 
     # Save the plot to a BytesIO object
@@ -165,10 +178,9 @@ def popular_furniture():
     # Convert the BytesIO object to base64 for embedding in HTML
     img_base64 = base64.b64encode(img_data.read()).decode('utf-8')
 
-    return render_template('visualization.html', img_base64=img_base64, title='Popular Furniture')
+    return render_template('visualization.html', img_base64=img_base64, title='Relationship Chair Table')
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
 
 
 #############################################################################
@@ -180,9 +192,6 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
 
 # ... routes ...
 @app.route('/customer_order_relationship')
@@ -194,6 +203,7 @@ def customer_order_relationship():
     order_prices = [order.price for customer in customers for order in customer.orders]
 
     # Scatter plot
+    matplotlib.use('agg')
     plt.scatter(ages, order_prices, alpha=0.5)
     plt.xlabel('Customer Age')
     plt.ylabel('Order Price')
@@ -210,8 +220,6 @@ def customer_order_relationship():
 
     return render_template('visualization.html', img_base64=img_base64, title='Customer-Order Relationship')
 
-if __name__ == '__main__':
-    app.run(debug=True)
 
 
 ##############################################################
@@ -243,8 +251,6 @@ def top_spenders():
 
     return render_template('top_spenders.html', customers=customers_highest_spending)
 
-if __name__ == '__main__':
-    app.run(debug=True)
 
 
 ############################################################################
@@ -255,9 +261,6 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
 
 @app.route('/send_birthday_message')
 def send_birthday_message():
@@ -277,8 +280,6 @@ def send_birthday_greeting(customer):
     # Here, we'll just print a message to the console
     print(f"Happy Birthday, {customer.name} {customer.last_name}!")
 
-if __name__ == '__main__':
-    app.run(debug=True)
 
 ########################################################################
     
@@ -289,9 +290,6 @@ from datetime import datetime
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
 
 # ... routes ...
 @app.route('/recommendations/<int:customer_id>')
@@ -322,5 +320,3 @@ def get_recommendations(customer_id):
 
     return jsonify(list(recommended_furniture))
 
-if __name__ == '__main__':
-    app.run(debug=True)

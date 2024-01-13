@@ -10,8 +10,8 @@ class Customer(db.Model):
     age = db.Column(db.Integer)
     country = db.Column(db.String(50))
 
-def __repr__(self):
-    return '<Customer {}>'.format(self.customer_id)
+    def __repr__(self):
+        return '<Customer {}>'.format(self.customer_id)
 
 
 #Order table
@@ -19,7 +19,7 @@ class Order(db.Model):
     __tablename__ = 'Order'
 
     order_id = db.Column(db.Integer, primary_key=True)
-    Date = db.Column(db.Date)
+    date = db.Column(db.Date)
     customer_id = db.Column(db.Integer, db.ForeignKey('Customer.customer_id'), nullable=False)
     price = db.Column(db.Float)
     chair = db.Column(db.Integer)
@@ -31,5 +31,5 @@ class Order(db.Model):
     bed = db.Column(db.Integer)
     shelf = db.Column(db.Integer)
 
-def __repr__(self):
-    return '<Order {}>'.format(self.order_id)
+    def __repr__(self):
+        return '<Order {}>'.format(self.order_id)
