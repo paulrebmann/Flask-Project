@@ -1,18 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Order</title>
-</head>
-<body>  
-    <h1>Customer</h1>
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Order/Costumer System</h1>
+    <h2>Customer</h2>
+    <a href="{{ url_for('add_customer') }}">Add New Customer</a>
     <ul>
         {%for customer in customers%}
-            <li>{{customer.customer_id}} {{customer.customer_first_name}} {{customer.customer_last_name}} - <a href="{{ url_for('add_order', customer_id=customer.customer_id) }}">Add Order</a> - <a href="{{ url_for('delete_customer', customer_id=customer.customer_id) }}">Delete Customer</a> - <a href="{{ url_for('edit_customer', customer_id=customer.customer_id) }}">Edit Customer</a></li>
+            <li>{{customer.customer_id}} {{customer.customer_first_name}} {{customer.customer_last_name}} - <a href="{{ url_for('add_order', customer_id=customer.customer_id) }}">Add Order</a> - <a href="{{ url_for('delete_customer', customer_id=customer.customer_id) }}">Delete Customer</a> - <a href="{{ url_for('edit_customer', customer_id=customer.customer_id) }}">Edit Customer</a>- <a href="{{ url_for('special_offer', customer_id=customer.customer_id) }}">Special Offer</a></li>
         {% endfor %}
     </ul>
-    <a href="{{ url_for('add_customer') }}">Add New Customer</a>
-    <a href="{{ url_for('orders') }}">Go to Orders</a>
-</body>
-</html>
+{% endblock %}

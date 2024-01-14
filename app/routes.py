@@ -11,7 +11,7 @@ from app import app, db
 @app.route('/')
 def index():
     customers = Customer.query.all()
-    return render_template('index.html', customers=customers)
+    return render_template('index.html', customers=customers, title='Order/Costumer System')
 
 @app.route('/orders')
 def orders():
@@ -50,12 +50,15 @@ def edit_customer(customer_id):
 
     return render_template('edit_customer.html', customer=customer)
 
-@app.route('/delete_customer/<int:customer_id>', methods=['POST'])
+@app.route('/delete_customer/<int:customer_id>', methods=['GET', 'POST'])
 def delete_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
-    db.session.delete(customer)
-    db.session.commit()
 
+    if request.method == 'POST':
+        db.session.delete(customer)
+        db.session.commit()
+        return redirect(url_for('index'))
+    
     return redirect(url_for('index'))
 
 @app.route('/add_order/<int:customer_id>', methods=['GET', 'POST'])
@@ -164,9 +167,9 @@ def popular_furniture():
 
     matplotlib.use('agg')
     plt.scatter(chair_items, table_items)
-    plt.xlabel('Furniture')
+    plt.xlabel('Table')
     plt.ylabel('Chair')
-    plt.title('Table')
+    plt.title('Table/Chair Relationship')
     plt.xticks(rotation=45, ha='right')
 
     # Save the plot to a BytesIO object
@@ -254,34 +257,33 @@ def top_spenders():
 
 
 ############################################################################
-    
-#task5: send a message to clients
-# ... routes ...
-from flask import Flask, render_template, request, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, timedelta
+## task5: special_offer for the client
+@app.route('/special_offer/<int:customer_id>')
+def special_offer(customer_id):
+    # Retrieve the customer and their order history
+    customer = Customer.query.get_or_404(customer_id)
+    total_items_purchased = sum([order.chair + order.stool + order.table + order.cabinet +
+                                 order.dresser + order.couch + order.bed + order.shelf for order in customer.orders])
+
+    # Define the threshold for the special offer
+    threshold_items = 10  # Adjust this threshold as needed
+
+    # Check if the customer qualifies for the special offer
+    if total_items_purchased >= threshold_items:
+        offer_message = f"Congratulations, {customer.customer_first_name}! You qualify for a special offer."
+
+        # You can customize the offer message or perform additional actions here
+    else:
+        offer_message = f"Keep shopping, {customer.customer_first_name}! You are just {threshold_items - total_items_purchased} items away from a special offer."
+
+    # For demonstration purposes, print the offer message to the console
+    print(offer_message)
+
+    # Render a simple HTML response (you can customize this based on your needs)
+    return render_template('special_offer.html', offer_message=offer_message)
 
 
-@app.route('/send_birthday_message')
-def send_birthday_message():
-    today = datetime.now().date()
-    customers_with_birthday = Customer.query.filter(
-        (Customer.birthdate.day == today.day) & (Customer.birthdate.month == today.month)
-    ).all()
-
-    for customer in customers_with_birthday:
-        send_birthday_greeting(customer)
-
-    return "Birthday messages sent successfully!"
-
-def send_birthday_greeting(customer):
-    # Replace this with your actual code to send a birthday message
-    # For example, you could use an email library or an API to send a message
-    # Here, we'll just print a message to the console
-    print(f"Happy Birthday, {customer.name} {customer.last_name}!")
-
-
-########################################################################
+###########################################
     
 #task6: recommendation engine (first install pip scikit-learn)
 from flask import Flask, render_template, request, redirect, url_for, jsonify
@@ -319,4 +321,3 @@ def get_recommendations(customer_id):
                 recommended_furniture.add(order.furniture)
 
     return jsonify(list(recommended_furniture))
-

@@ -9,6 +9,7 @@ class Customer(db.Model):
     customer_last_name = db.Column(db.String(50))
     age = db.Column(db.Integer)
     country = db.Column(db.String(50))
+    orders = db.relationship('Order',lazy=True)
 
     def __repr__(self):
         return '<Customer {}>'.format(self.customer_id)
