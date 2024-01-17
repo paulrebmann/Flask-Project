@@ -53,11 +53,9 @@ def edit_customer(customer_id):
 @app.route('/delete_customer/<int:customer_id>', methods=['GET', 'POST'])
 def delete_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
-
-    if request.method == 'POST':
-        db.session.delete(customer)
-        db.session.commit()
-        return redirect(url_for('index'))
+    db.session.delete(customer)
+    db.session.commit()
+    return redirect(url_for('index'))
     
     return redirect(url_for('index'))
 
@@ -289,7 +287,7 @@ def special_offer(customer_id):
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from sklearn.metrics.pairwise import cosine_similarity
+#from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
 
