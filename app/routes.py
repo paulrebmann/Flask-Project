@@ -100,9 +100,11 @@ def edit_order(order_id):
 
     return render_template('edit_order.html', order=order)
 
+from sqlalchemy.orm import exc
 @app.route('/delete_order/<int:order_id>', methods=['POST'])
 def delete_order(order_id):
     order = Order.query.get_or_404(order_id)
+
     db.session.delete(order)
     db.session.commit()
 
@@ -152,7 +154,7 @@ def customer_locations():
     # Convert the BytesIO object to base64 for embedding in HTML
     img_base64 = base64.b64encode(img_data.read()).decode('utf-8')
 
-    return render_template('visualization.html', img_base64=img_base64, title='Customer Locations')
+    return render_template('visualization1.html', img_base64=img_base64, title='Customer Locations')
 
 
 # most popular forniture?
@@ -187,7 +189,7 @@ def popular_furniture():
     # Convert the BytesIO object to base64 for embedding in HTML
     img_base64 = base64.b64encode(img_data.read()).decode('utf-8')
 
-    return render_template('visualization.html', img_base64=img_base64, title='Furniture')
+    return render_template('visualization2.html', img_base64=img_base64, title='Furniture')
 
 
 

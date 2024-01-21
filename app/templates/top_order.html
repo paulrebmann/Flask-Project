@@ -1,10 +1,24 @@
 {% extends "base.html" %}
 
+{% block sheets %}
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/topOrder.css') }}">
+{% endblock %}
+
 {% block content %} 
     <h1>Top Customers by Orders</h1>
     <ul>
         {% for customer in customers %}
-            <li>{{ customer.customer_first_name }} {{ customer.customer_last_name }} - Orders: {{ customer.orders|length }}</li>
+            <div class="container">
+            <li>
+                    <div class="name">
+                        {{ customer.customer_first_name }} 
+                        {{ customer.customer_last_name }} 
+                    </div>
+                    <div class="orderLength">
+                        Orders: {{ customer.orders|length }}
+                    </div>
+            </li>
+            </div> 
         {% endfor %}
     </ul>
     <br>
