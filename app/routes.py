@@ -159,15 +159,23 @@ def customer_locations():
 
 @app.route('/popular_furniture')
 def popular_furniture():
-    orders = Order.query.all()
-    chair_items = [order.chair for order in orders]
-    table_items = [order.table for order in orders]
+    # Möbeltypen aus den Anfragenparametern abrufen
+    selected_furniture = request.args.getlist('furniture_type')
 
+    # Daten aus der Datenbank für die ausgewählten Möbeltypen abrufen
+    orders = Order.query.all()
+    data = {furniture_type: [getattr(order, furniture_type) for order in orders] for furniture_type in selected_furniture}
+
+    # Scatterplot erstellen
     matplotlib.use('agg')
-    plt.scatter(chair_items, table_items)
-    plt.xlabel('Table')
-    plt.ylabel('Chair')
-    plt.title('Table/Chair Relationship')
+    plt.figure(figsize=(10, 6))
+    for furniture_type, values in data.items():
+        plt.scatter([furniture_type] * len(values), values, label=furniture_type)
+
+    plt.xlabel('Möbeltyp')
+    plt.ylabel('Anzahl')
+    plt.title('Beliebte Möbeltypen')
+    plt.legend()
     plt.xticks(rotation=45, ha='right')
 
     # Save the plot to a BytesIO object
@@ -179,8 +187,7 @@ def popular_furniture():
     # Convert the BytesIO object to base64 for embedding in HTML
     img_base64 = base64.b64encode(img_data.read()).decode('utf-8')
 
-    return render_template('visualization.html', img_base64=img_base64, title='Relationship Chair Table')
-
+    return render_template('visualization.html', img_base64=img_base64, title='Furniture')
 
 
 
@@ -283,39 +290,51 @@ def special_offer(customer_id):
 
 ###########################################
     
-#task6: recommendation engine (first install pip scikit-learn)
-from flask import Flask, render_template, request, redirect, url_for, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-#from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
-
-
-# ... routes ...
+#task6: recommendation 
+from surprise import Dataset, Reader, KNNBasic
+from surprise.model_selection import train_test_split
+import pandas as pd
+# The model utilizes the k-NN algorithm for Collaborative Filtering, 
+# predicting quantities of furniture items for a customer based on the ordering patterns of similar customers, 
+# thereby providing personalized recommendations.
 @app.route('/recommendations/<int:customer_id>')
 def get_recommendations(customer_id):
-    # Get the target customer and their purchased furniture
-    target_customer = Customer.query.get_or_404(customer_id)
-    target_furniture = [order.furniture for order in target_customer.orders]
+    #load Data from db
+    orders = Order.query.all()
 
-    # Create a matrix of customer IDs and their purchased furniture
-    data = []
-    for customer in Customer.query.all():
-        row = [1 if furniture in [order.furniture for order in customer.orders] else 0 for furniture in target_furniture]
-        data.append(row)
+    # create a DataFrame for each forniture_type
+    data = [(order.customer_id, 'chair', order.chair) for order in orders] + \
+           [(order.customer_id, 'stool', order.stool) for order in orders] + \
+           [(order.customer_id, 'table', order.table) for order in orders] + \
+           [(order.customer_id, 'cabinet', order.cabinet) for order in orders] + \
+           [(order.customer_id, 'dresser', order.dresser) for order in orders] + \
+           [(order.customer_id, 'couch', order.couch) for order in orders] + \
+           [(order.customer_id, 'bed', order.bed) for order in orders] + \
+           [(order.customer_id, 'shelf', order.shelf) for order in orders]
 
-    # Calculate cosine similarity between customers
-    similarity_matrix = cosine_similarity(data, data)
+    # Train Alogrithmus
+    reader = Reader(rating_scale=(0, 10))
+    data = Dataset.load_from_df(pd.DataFrame(data, columns=['customer_id', 'furniture_type', 'quantity']), reader)
+    trainset, testset = train_test_split(data, test_size=0.2)
+    algo = KNNBasic()
+    algo.fit(trainset)
 
-    # Find the most similar customers
-    similar_customers = np.argsort(similarity_matrix[customer_id - 1])[::-1][1:6]
+    # get the Prediction
+    current_customer_data = [(customer_id, 'chair', None),
+                             (customer_id, 'stool', None),
+                             (customer_id, 'table', None),
+                             (customer_id, 'cabinet', None),
+                             (customer_id, 'dresser', None),
+                             (customer_id, 'couch', None),
+                             (customer_id, 'bed', None),
+                             (customer_id, 'shelf', None)]
 
-    # Get the recommended furniture based on similar customers' purchases
-    recommended_furniture = set()
-    for similar_customer_id in similar_customers:
-        similar_customer = Customer.query.get(similar_customer_id + 1)  # Adding 1 because customer IDs start from 1
-        for order in similar_customer.orders:
-            if order.furniture not in target_furniture:
-                recommended_furniture.add(order.furniture)
+    predictions = []
+    for data_point in current_customer_data:
+        prediction = algo.predict(data_point[0], data_point[1])
+        predictions.append({'furniture_type': data_point[1], 'predicted_quantity': prediction.est})
 
-    return jsonify(list(recommended_furniture))
+    # Sortieren Sie die Vorhersagen nach der vorhergesagten Menge
+    predictions.sort(key=lambda x: x['predicted_quantity'], reverse=True)
+
+    return render_template('recommendations.html', predictions=predictions)

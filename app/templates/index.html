@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block sheets %}
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+{% endblock %}
+
 {% block content %}
     <h1>Order/Costumer System</h1>
     <h2>Customer</h2>
@@ -7,8 +11,20 @@
     <ul>
         {%for customer in customers%}
             <div class="customerAll">
-            <li>{{customer.customer_id}}  {{customer.customer_first_name}} {{customer.customer_last_name}} - <a href="{{ url_for('add_order', customer_id=customer.customer_id) }}">Add Order</a> - <a href="{{ url_for('delete_customer', customer_id=customer.customer_id) }}">Delete Customer</a> - <a href="{{ url_for('edit_customer', customer_id=customer.customer_id) }}">Edit Customer</a>- <a href="{{ url_for('special_offer', customer_id=customer.customer_id) }}">Special Offer</a></li>
+                <li>
+                    <div class="left">
+                    <p>{{customer.customer_id}}</p>
+                    <p>{{customer.customer_first_name}}</p>
+                    <p>{{customer.customer_last_name}}</p>
+                    </div><div class="right">
+                    <a href="{{ url_for('add_order', customer_id=customer.customer_id) }}">Add Order</a>  
+                    <a href="{{ url_for('delete_customer', customer_id=customer.customer_id) }}">Delete Customer</a> 
+                    <a href="{{ url_for('edit_customer', customer_id=customer.customer_id) }}">Edit Customer</a>  
+                    <a href="{{ url_for('special_offer', customer_id=customer.customer_id) }}">Special Offer</a> 
+                    <a href="{{ url_for('get_recommendations', customer_id=customer.customer_id) }}">Recoomendation</a>
+                    </div>
+                </li>
             </div>
-            {% endfor %}
+        {% endfor %}
     </ul>
 {% endblock %}

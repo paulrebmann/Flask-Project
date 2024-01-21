@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block sheets %}
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/add_C.css') }}">
+{% endblock %}
 
 {% block content %} 
     <h1>Add Customer</h1>
@@ -18,5 +21,7 @@
         <button type="submit">Submit</button>
     </form>
     <br>
-    <a href="{{ url_for('index') }}">Back to Customers</a>
+    <div class="submit">
+        <a href="{{ url_for('index') }}">Back to Customers</a>
+    </div>
 {% endblock %}
