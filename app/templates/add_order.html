@@ -3,34 +3,62 @@
 {% block content %} 
     <h1>Add Order for Customer {{ customer_id }}</h1>
     <form method="POST" action="">
-        <label for="price">Price:</label>
-        <input type="text" id="price" name="price" value="0" required>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Price</span>
+            </div>
+            <input class="form-control" type="text" id="price" name="price" value="0" required>
+        </div>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Chair</span>
+            </div>
+            <input class="form-control" type="number" id="chair" name="chair" value="0" required>
+        </div>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Stool</span>
+            </div>
+            <input class="form-control" type="number" id="stool" name="stool" value="0" required>
+        </div>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Table</span>
+            </div>
+            <input class="form-control" type="number" id="table" name="table" value="0" required>
+        </div>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Cabinet</span>
+            </div>
+            <input class="form-control" type="number" id="cabinet" name="cabinet" value="0" required>
+        </div>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Dresser</span>
+            </div>
+            <input class="form-control" type="number" id="dresser" name="dresser" value="0" required>
+        </div>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Couch</span>
+            </div>
+            <input class="form-control" type="number" id="couch" name="couch" value="0" required>
+        </div>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Bed</span>
+            </div>
+            <input class="form-control"  id="bed" name="bed" value="0" required>
+        </div>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Shelf</span>
+            </div>
+            <input class="form-control" type="number" id="shelf" name="shelf" value="0" required>
+        </div>
         <br>
-        <label for="chair">Chair:</label>
-        <input type="number" id="chair" name="chair" value="0" required>
-        <br>
-        <label for="stool">Stool:</label>
-        <input type="number" id="stool" name="stool" value="0" required>
-        <br>
-        <label for="table">Table:</label>
-        <input type="number" id="table" name="table" value="0" required>
-        <br>
-        <label for="cabinet">Cabinet:</label>
-        <input type="number" id="cabinet" name="cabinet" value="0" required>
-        <br>
-        <label for="dresser">Dresser:</label>
-        <input type="number" id="dresser" name="dresser" value="0" required>
-        <br>
-        <label for="couch">Couch:</label>
-        <input type="number" id="couch" name="couch" value="0" required>
-        <br>
-        <label for="bed">Bed:</label>
-        <input type="number" id="bed" name="bed" value="0" required>
-        <br>
-        <label for="shelf">Shelf:</label>
-        <input type="number" id="shelf" name="shelf" value="0" required>
-        <br>
-        <button type="submit">Submit</button>
+        <button class="btn btn-light" type="submit">Submit</button>
     </form>
     <br>
     <div class="submit">
