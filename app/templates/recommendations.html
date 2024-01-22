@@ -2,11 +2,25 @@
 
 {% block content %}
     <h1>Recommendations</h1>
-    <p>Rating scale from 0 to 10</p>
-    <p>a rating of 0 indicates that the piece of furniture does not meet the customer's preferences or requirements at all, while a rating of 10 indicates that the piece of furniture perfectly matches the customer's preferences or requirements. Values in between would then represent gradually increasing matches, with higher scores indicating a better fit.</p>
-    <ul>
+    <div class="card mb-2">
+        <div class="card-body">
+            <p>Rating scale from 0 to 10</p>
+            <p>a rating of 0 indicates that the piece of furniture does not meet the customer's preferences or requirements at all, while a rating of 10 indicates that the piece of furniture perfectly matches the customer's preferences or requirements. Values in between would then represent gradually increasing matches, with higher scores indicating a better fit.</p>
+        </div>
+      </div>
+    
+    <ul class="list-group">
         {% for prediction in predictions %}
-            <li>{{ prediction.furniture_type }}: {{ prediction.predicted_quantity }}</li>
+            <li class="list-group-item">
+                <div class="row justify-content-start">
+                    <div class="col-4">
+                        {{ prediction.furniture_type }} 
+                    </div>
+                    <div class="col-6">
+                        {{ prediction.predicted_quantity }}
+                    </div>
+                </div>
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}

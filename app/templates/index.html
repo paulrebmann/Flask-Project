@@ -7,24 +7,21 @@
 {% block content %}
     <h1>Order/Costumer System</h1>
     <h2>Customer</h2>
-    <div class="addC"><a href="{{ url_for('add_customer') }}">Add New Customer</a></div>
-    <ul>
+    <a href="{{ url_for('add_customer') }}" class="btn btn-info mb-2">Add New Customer</a>
+    <ul class="list-group">
         {%for customer in customers%}
-            <div class="customerAll">
-                <li>
-                    <div class="left">
-                    <p>{{customer.customer_id}}</p>
-                    <p>{{customer.customer_first_name}}</p>
-                    <p>{{customer.customer_last_name}}</p>
-                    </div><div class="right">
-                    <a href="{{ url_for('add_order', customer_id=customer.customer_id) }}">Add Order</a>  
-                    <a href="{{ url_for('delete_customer', customer_id=customer.customer_id) }}">Delete Customer</a> 
-                    <a href="{{ url_for('edit_customer', customer_id=customer.customer_id) }}">Edit Customer</a>  
-                    <a href="{{ url_for('special_offer', customer_id=customer.customer_id) }}">Special Offer</a> 
-                    <a href="{{ url_for('get_recommendations', customer_id=customer.customer_id) }}">Recoomendation</a>
+                <li class="list-group-item">
+                    <div class="row justify-content-start">
+                        <div class="col"><p>{{customer.customer_id}}</p></div>
+                        <div class="col"><p>{{customer.customer_first_name}}</p></div>
+                        <div class="col"><p>{{customer.customer_last_name}}</p></div>
+                        <div class="col"><a href="{{ url_for('add_order', customer_id=customer.customer_id) }}" class="btn btn-outline-secondary">Add Order</a> </div> 
+                        <div class="col"><a href="{{ url_for('delete_customer', customer_id=customer.customer_id) }}" class="btn btn-outline-secondary">Delete Customer</a> </div>
+                        <div class="col"><a href="{{ url_for('edit_customer', customer_id=customer.customer_id) }}" class="btn btn-outline-secondary">Edit Customer</a>  </div>
+                        <div class="col"><a href="{{ url_for('special_offer', customer_id=customer.customer_id) }}" class="btn btn-outline-secondary"">Special Offer</a> </div>
+                        <div class="col"><a href="{{ url_for('get_recommendations', customer_id=customer.customer_id) }}" class="btn btn-outline-secondary">Recoomendation</a></div>
                     </div>
                 </li>
-            </div>
         {% endfor %}
     </ul>
 {% endblock %}

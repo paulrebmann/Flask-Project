@@ -2,24 +2,24 @@
 
 {% block content %}
     <form action="{{ url_for('popular_furniture') }}" method="get">
-        <label for="furniture_type">Wähle Möbeltypen aus:</label>
-        <select name="furniture_type" multiple>
-            <option value="chair">Chair</option>
-            <option value="stool">Stool</option>
-            <option value="table">Table</option>
-            <option value="cabinet">Cabinet</option>
-            <option value="dresser">Dresser</option>
-            <option value="couch">Couch</option>
-            <option value="bed">Table</option>
-            <option value="shelf">Shelf</option>
-        </select>
-        <button type="submit">Visualisierung anzeigen</button>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend"><label class="input-group-text" for="furniture_type">Choose furniture_type:</label></div>
+            <select name="furniture_type" class="custom-select" multiple>
+                <option value="chair">Chair</option>
+                <option value="stool">Stool</option>
+                <option value="table">Table</option>
+                <option value="cabinet">Cabinet</option>
+                <option value="dresser">Dresser</option>
+                <option value="couch">Couch</option>
+                <option value="bed">Table</option>
+                <option value="shelf">Shelf</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-info">Visualisierung anzeigen</button>
     </form>
     
-    <h1>{{ title }}</h1>
+    <h1 class="mt-2">{{ title }}</h1>
     <img src="data:image/png;base64,{{ img_base64 }}" alt="{{ title }} Chart">
     <br>
-    <div class="submit">
-        <a href="{{ url_for('index') }}">Back to Customers</a>
-    </div>
+    <a href="{{ url_for('index') }}" class="btn btn-info mt-2">Back to Customers</a>
 {% endblock %}

@@ -6,23 +6,21 @@
 
 {% block content %} 
     <h1>Top Customers by Orders</h1>
-    <ul>
+    <ul class="list-group">
         {% for customer in customers %}
-            <div class="container">
-            <li>
-                    <div class="name">
-                        {{ customer.customer_first_name }} 
-                        {{ customer.customer_last_name }} 
-                    </div>
-                    <div class="orderLength">
-                        Orders: {{ customer.orders|length }}
+            <li class="list-group-item">
+                    <div class="row justify-content-start">
+                        <div class="col-4">
+                            {{ customer.customer_first_name }} 
+                            {{ customer.customer_last_name }} 
+                        </div>
+                        <div class="col-6">
+                            Orders: {{ customer.orders|length }}
+                        </div>
                     </div>
             </li>
-            </div> 
         {% endfor %}
     </ul>
-    <br>
-    <div class="submit">
-        <a href="{{ url_for('index') }}">Back to Customers</a>
-    </div>
+
+    <a href="{{ url_for('index') }}" class="btn btn-info mt-2">Back to Customers</a>
 {% endblock %}
