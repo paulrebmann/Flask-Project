@@ -1,23 +1,27 @@
-# Task 2: edit, add, delete data
+# Task 2
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 from app.models import Customer, Order
 from app import app, db
+import matplotlib.pyplot as plt
+import matplotlib
+from io import BytesIO
+import base64
 
 
-
-# routes.....
+# Here are the routes
 @app.route('/')
 def index():
     customers = Customer.query.all()
     return render_template('index.html', customers=customers, title='Order/Costumer System')
 
+# Show Orders
 @app.route('/orders')
 def orders():
     orders = Order.query.all()
     return render_template('orders.html', orders=orders)
 
+# Add Coustomer
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
     if request.method == 'POST':
@@ -35,6 +39,7 @@ def add_customer():
 
     return render_template('add_customer.html')
 
+#Edit Customer
 @app.route('/edit_customer/<int:customer_id>', methods=['GET', 'POST'])
 def edit_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
@@ -50,6 +55,7 @@ def edit_customer(customer_id):
 
     return render_template('edit_customer.html', customer=customer)
 
+#Delete Customer
 @app.route('/delete_customer/<int:customer_id>', methods=['GET', 'POST'])
 def delete_customer(customer_id):
     customer = Customer.query.get_or_404(customer_id)
@@ -59,6 +65,7 @@ def delete_customer(customer_id):
     
     return redirect(url_for('index'))
 
+#Add Order
 @app.route('/add_order/<int:customer_id>', methods=['GET', 'POST'])
 def add_order(customer_id):
     if request.method == 'POST':
@@ -80,6 +87,7 @@ def add_order(customer_id):
 
     return render_template('add_order.html', customer_id=customer_id)
 
+#Edit Order
 @app.route('/edit_order/<int:order_id>', methods=['GET', 'POST'])
 def edit_order(order_id):
     order = Order.query.get_or_404(order_id)
@@ -100,7 +108,8 @@ def edit_order(order_id):
 
     return render_template('edit_order.html', order=order)
 
-from sqlalchemy.orm import exc
+
+#Delete Order
 @app.route('/delete_order/<int:order_id>', methods=['POST'])
 def delete_order(order_id):
     order = Order.query.get_or_404(order_id)
@@ -112,17 +121,9 @@ def delete_order(order_id):
 
 
 
-# Task 3a: visualize data
-from flask import Flask, render_template, request, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-import matplotlib.pyplot as plt
-import matplotlib
-from io import BytesIO
-import base64
+# Task 3
 
-
-# where are the customers from?
+# Where are the Customers from
 @app.route('/customer_locations')
 def customer_locations():
     customers = Customer.query.all()
@@ -145,126 +146,72 @@ def customer_locations():
     plt.title('Customer Locations')
     plt.xticks(rotation=45, ha='right')
 
-    # Save the plot to a BytesIO object
+    # Save the plot 
     img_data = BytesIO()
     plt.savefig(img_data, format='png')
     img_data.seek(0)
     plt.close()
 
-    # Convert the BytesIO object to base64 for embedding in HTML
     img_base64 = base64.b64encode(img_data.read()).decode('utf-8')
 
     return render_template('visualization1.html', img_base64=img_base64, title='Customer Locations')
 
 
-# most popular forniture?
-
+# most popular forniture
 @app.route('/popular_furniture')
 def popular_furniture():
-    # Möbeltypen aus den Anfragenparametern abrufen
+    # choose Forniture
     selected_furniture = request.args.getlist('furniture_type')
 
-    # Daten aus der Datenbank für die ausgewählten Möbeltypen abrufen
+    # data from db
     orders = Order.query.all()
     data = {furniture_type: [getattr(order, furniture_type) for order in orders] for furniture_type in selected_furniture}
 
-    # Scatterplot erstellen
+    # create plot
     matplotlib.use('agg')
     plt.figure(figsize=(10, 6))
     for furniture_type, values in data.items():
         plt.scatter([furniture_type] * len(values), values, label=furniture_type)
 
-    plt.xlabel('Möbeltyp')
-    plt.ylabel('Anzahl')
-    plt.title('Beliebte Möbeltypen')
+    plt.xlabel('types of furniture')
+    plt.ylabel('count')
+    plt.title('Popular types of furniture')
     plt.legend()
     plt.xticks(rotation=45, ha='right')
 
-    # Save the plot to a BytesIO object
     img_data = BytesIO()
     plt.savefig(img_data, format='png')
     img_data.seek(0)
     plt.close()
 
-    # Convert the BytesIO object to base64 for embedding in HTML
     img_base64 = base64.b64encode(img_data.read()).decode('utf-8')
 
     return render_template('visualization2.html', img_base64=img_base64, title='Furniture')
 
 
 
-#############################################################################
-# task 3b: visualize patterns
-from flask import Flask, render_template, request, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-import matplotlib.pyplot as plt
-from io import BytesIO
-import base64
 
-
-# ... routes ...
-@app.route('/customer_order_relationship')
-def customer_order_relationship():
-    customers = Customer.query.all()
-
-    # Extracting data for the scatter plot
-    ages = [customer.age for customer in customers]
-    order_prices = [order.price for customer in customers for order in customer.orders]
-
-    # Scatter plot
-    matplotlib.use('agg')
-    plt.scatter(ages, order_prices, alpha=0.5)
-    plt.xlabel('Customer Age')
-    plt.ylabel('Order Price')
-    plt.title('Relationship Between Customer Age and Order Price')
-
-    # Save the plot to a BytesIO object
-    img_data = BytesIO()
-    plt.savefig(img_data, format='png')
-    img_data.seek(0)
-    plt.close()
-
-    # Convert the BytesIO object to base64 for embedding in HTML
-    img_base64 = base64.b64encode(img_data.read()).decode('utf-8')
-
-    return render_template('visualization.html', img_base64=img_base64, title='Customer-Order Relationship')
-
-
-
-##############################################################
-# task4: most orders and money spent
-from flask import Flask, render_template, request, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-import matplotlib.pyplot as plt
-from io import BytesIO
-import base64
-
-
-# ...  routes ...
+# task4
+#Top Orders
 @app.route('/top_orders')
 def top_orders():
     customers = Customer.query.all()
-
-    # Find customers with the most orders
     customers_most_orders = sorted(customers, key=lambda x: len(x.orders), reverse=True)[:10]
-
     return render_template('top_order.html', customers=customers_most_orders)
 
+#Top Spends
 @app.route('/top_spenders')
 def top_spenders():
     customers = Customer.query.all()
-
-    # Find customers who spent the most money
     customers_highest_spending = sorted(customers, key=lambda x: sum(order.price for order in x.orders), reverse=True)[:10]
 
     return render_template('top_spenders.html', customers=customers_highest_spending)
 
 
 
-############################################################################
-## task5: special_offer for the client
+
+# task5
+# Special Offer
 @app.route('/special_offer/<int:customer_id>')
 def special_offer(customer_id):
     # Retrieve the customer and their order history
@@ -290,9 +237,10 @@ def special_offer(customer_id):
     return render_template('special_offer.html', offer_message=offer_message)
 
 
-###########################################
+
     
-#task6: recommendation 
+# Task6: 
+# Recommendation 
 from surprise import Dataset, Reader, KNNBasic
 from surprise.model_selection import train_test_split
 import pandas as pd

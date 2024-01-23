@@ -4,9 +4,9 @@
     <h1>Top Spenders</h1>
     <ul class="list-group">
         {% for customer in customers %}
-        <li class="list-group-item">
-            {{ customer.customer_first_name }} {{ customer.customer_last_name }}
-        </li>
+            <li class="list-group-item">
+                {{ customer.customer_first_name }} {{ customer.customer_last_name }} {{ total_spent }}
+            </li>
         {% endfor %}
     </ul>
     <br>

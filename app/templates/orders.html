@@ -11,11 +11,16 @@
                 <li class="list-group-item">
                     <div class="row justify-content-start">
                         <div class="col">Order ID: {{order.order_id}} </div>
-                        <div class="col">Customer_ID:{{order.customer_id}} </div>
-                        <div class="col">Price:{{order.price}}  Chair:{{order.chair}} </div>
-                        <div class="col">Stool:{{order.stool}}  Table:{{order.table}} </div>
-                        <div class="col">Cabinet:{{order.cabinet}}  Dresser:{{order.dresser}} </div>
-                        <div class="col">Couch:{{order.couch}}  Bed:{{order.bed}}  Shelf:{{order.shelf}} </div>
+                        <div class="col">Customer_ID: {{order.customer_id}} </div>
+                        <div class="col">Price: {{order.price}}</div>
+                        <div class="col">Chair: {{order.chair}} </div>
+                        <div class="col">Stool: {{order.stool}} </div>
+                        <div class="col">Table: {{order.table}} </div>
+                        <div class="col">Cabinet: {{order.cabinet}}</div>
+                        <div class="col">Dresser: {order.dresser}} </div>
+                        <div class="col">Couch: {{order.couch}}</div>
+                        <div class="col">Bed: {{order.bed}}</div>
+                        <div class="col">Shelf: {{order.shelf}} </div>
                         <div class="col"><a href="{{ url_for('edit_order', order_id=order.order_id) }}" class="btn btn-outline-secondary">Edit Order</a></div>
                     </div>   
                 </li>

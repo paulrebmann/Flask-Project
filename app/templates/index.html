@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Order/Costumer System</h1>
-    <h2>Customer</h2>
-    <a href="{{ url_for('add_customer') }}" class="btn btn-info mb-2">Add New Customer</a>
+    <h1 class="mb-3">Order/Costumer System</h1>
+    <h2 class="mb-3">Customer</h2>
+    <a href="{{ url_for('add_customer') }}" class="btn btn-info mb-3">Add New Customer</a>
     <ul class="list-group">
         {%for customer in customers%}
                 <li class="list-group-item">

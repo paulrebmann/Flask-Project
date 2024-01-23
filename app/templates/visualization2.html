@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <h1 class="mb-3">{{ title }}</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <p>The graphic visualizes the number per piece of furniture in comparison to the other pieces of furniture. You can decide which piece of furniture you want to see. To do this, select the pieces you are looking for. After that the graphics will change.</p>
+        </div>
+    </div>
     <form action="{{ url_for('popular_furniture') }}" method="get">
         <div class="input-group mb-3">
             <div class="input-group-prepend"><label class="input-group-text" for="furniture_type">Choose furniture_type:</label></div>
@@ -18,7 +24,6 @@
         <button type="submit" class="btn btn-info">Visualisierung anzeigen</button>
     </form>
     
-    <h1 class="mt-2">{{ title }}</h1>
     <img src="data:image/png;base64,{{ img_base64 }}" alt="{{ title }} Chart">
     <br>
     <a href="{{ url_for('index') }}" class="btn btn-info mt-2">Back to Customers</a>
