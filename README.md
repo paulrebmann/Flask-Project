@@ -23,6 +23,6 @@ Two rankings are shown, one shows the top 10 people with the most orders and the
 The marketing campaign works in such a way that every user receives a special offer from a certain order quantity. 
 When the user has reached the quantity of 10 units, this can be called up in the 'Special Offer' field and there is a print output in the console.
 
-## Task 6
+## Task 6 (Recommendation)
 There is also a recommendation that can be called up in the user field. It shows which products most closely match the purchase history of the respective customer.
 A rating of 0 means that the piece of furniture does not match the customer's wishes or requirements at all, while a rating of 10 means that the piece of furniture matches the customer's wishes or requirements perfectly. Scores in between would then represent a gradually increasing match, with higher scores indicating a better match.
