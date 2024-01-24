@@ -160,23 +160,32 @@ def customer_locations():
 # most popular forniture
 @app.route('/popular_furniture')
 def popular_furniture():
-    # choose Forniture
     selected_furniture = request.args.getlist('furniture_type')
 
-    # data from db
-    orders = Order.query.all()
-    data = {furniture_type: [getattr(order, furniture_type) for order in orders] for furniture_type in selected_furniture}
+    orders = Order.query.join(Customer).add_columns(
+        Order.chair, Order.stool, Order.table, Order.cabinet,
+        Order.dresser, Order.couch, Order.bed, Order.shelf,
+        Customer.country
+    ).all()
 
-    # create plot
+    order_data = {}
+    furniture_types = ['chair', 'stool', 'table', 'cabinet', 'dresser', 'couch', 'bed', 'shelf']
+
+    for order in orders:
+        furniture_count = sum(getattr(order, furniture_type) for furniture_type in furniture_types)
+        country = order.country
+
+        order_data[(furniture_count, country)] = order_data.get((furniture_count, country), 0) + 1
+
+    x_values, y_values = zip(*order_data.keys())
+
     matplotlib.use('agg')
     plt.figure(figsize=(10, 6))
-    for furniture_type, values in data.items():
-        plt.scatter([furniture_type] * len(values), values, label=furniture_type)
+    plt.scatter(x_values, y_values, s=[order_data[(x, y)] * 10 for x, y in zip(x_values, y_values)], alpha=0.7)
 
-    plt.xlabel('types of furniture')
-    plt.ylabel('count')
-    plt.title('Popular types of furniture')
-    plt.legend()
+    plt.xlabel('Number of Furniture')
+    plt.ylabel('Country')
+    plt.title('Relationship between Furniture and Customer Country')
     plt.xticks(rotation=45, ha='right')
 
     img_data = BytesIO()
@@ -186,7 +195,7 @@ def popular_furniture():
 
     img_base64 = base64.b64encode(img_data.read()).decode('utf-8')
 
-    return render_template('visualization2.html', img_base64=img_base64, title='Furniture')
+    return render_template('visualization2.html', img_base64=img_base64, title='Customer Order Relationship')
 
 
 
