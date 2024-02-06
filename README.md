@@ -2,9 +2,9 @@
 
 ## How do I open the app?
 ```
-1. source venv/bin/activate
-2. export FLASK_APP=flaskProject.py
-3. flask run
+source venv/bin/activate
+export FLASK_APP=flaskProject.py
+flask run
 ```
 
 ## Task 2 (Edit the Data)
