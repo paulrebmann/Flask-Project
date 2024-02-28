@@ -1,5 +1,10 @@
 # Flask-Project University of Saarland
 
+## Teammember
+- Paul Rebmann
+- Niklas Franzen
+- Kenny Marcel Estrada Auz
+
 ## How do I open the app?
 ```
 source venv/bin/activate
