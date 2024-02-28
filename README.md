@@ -30,8 +30,6 @@ When the user has reached the quantity of 10 units, this can be called up in the
 
 ## Task 6 (Recommendation)
 There is also a recommendation that can be called up in the user field. It shows which products most closely match the purchase history of the respective customer.
-<<<<<<< HEAD
 A rating of 0 means that the piece of furniture does not match the customer's wishes or requirements at all, while a rating of 10 means that the piece of furniture matches the customer's wishes or requirements perfectly. Scores in between would then represent a gradually increasing match, with higher scores indicating a better match.
-=======
 A rating of 0 means that the piece of furniture does not match the customer's wishes or requirements at all, while a rating of 10 means that the piece of furniture matches the customer's wishes or requirements perfectly. Scores in between would then represent a gradually increasing match, with higher scores indicating a better match.
->>>>>>> 8a5013d47eca25031075174aec91fb941e56f5d1
+
